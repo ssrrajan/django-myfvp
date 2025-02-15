@@ -13,6 +13,7 @@ env/
 # Django-specific ignores
 db.sqlite3
 /media/  # User-uploaded media files
+
 *.log  # Log files
 
 # IDE/Editor files
