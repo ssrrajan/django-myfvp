@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigate Complaint</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/investigation_background.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: white;
+        }
+        h1 {
+            color: rgb(255, 255, 255);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .complaint-details, .form-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 600px;
+            margin: 10px auto;
+        }
+        .complaint-details p, .form-container p {
+            margin: 10px 0;
+            color: #333;
+        }
+        .complaint-details strong, .form-container label {
+            color: #4CAF50;
+        }
+        .form-container input[type="file"] {
+            display: block;
+            margin: 10px 0;
+            padding: 5px;
+        }
+        .form-container button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+        .status-message {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .status-message p {
+            margin: 10px 0;
+        }
+        .status-message p.positive {
+            color: green;
+        }
+        .status-message p.negative {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Investigate Complaint {{ complaint.complaint_no }}</h1>
+    <div class="complaint-details">
+        <p><strong>Name:</strong> {{ complaint.name }}</p>
+        <p><strong>Status:</strong> {{ complaint.status }}</p>
+        <p><strong>Uploaded File:</strong> {{ complaint.filename }}</p>
+    </div>
+    <div class="form-container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="video_file">Upload Investigation Video:</label>
+            <input type="file" name="video_file" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div class="status-message">
+        {% if complaint.status == "Face Matched" %}
+            <p class="positive"><strong>Match Found!</strong></p>
+        {% elif complaint.status == "Match Failed" %}
+            <p class="negative"><strong>Match Not Found!</strong></p>
+        {% else %}
+            <p><strong>Investigation in Progress or awaiting results...</strong></p>
+        {% endif %}
+    </div>
+</body>
+</html>

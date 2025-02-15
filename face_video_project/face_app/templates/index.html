@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Home!!!</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/index_background.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            color: #000000;
+            margin-bottom: 20px;
+        }
+        nav {
+            display: flex;
+            gap: 10px;
+        }
+        nav a {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        nav a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Face Video Complaint System</h1>
+    <nav>
+        <a href="{% url 'admin_login' %}">Admin Login</a> |
+        <a href="{% url 'user_login' %}">User Login</a> |
+        <a href="{% url 'new_user' %}">New User Registration</a>
+    </nav>
+</body>
+</html>

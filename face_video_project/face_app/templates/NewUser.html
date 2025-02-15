@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New User Registration</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/user_background.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            color: #101e51;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: rgba(130, 187, 224, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .card p, .card label, .card textarea {
+            color: #101e51;
+            margin: 10px 0;
+            display: block;
+        }
+        .card input, .card textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+    <script>
+        function validateForm() {
+            let name = document.getElementById("name").value.trim();
+            let mobile = document.getElementById("mobile").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let address = document.getElementById("address").value.trim();
+            let uname = document.getElementById("uname").value.trim();
+            let password = document.getElementById("password").value.trim();
+            let errorMsg = "";
+
+            if (!name || !mobile || !email || !address || !uname || !password) {
+                errorMsg = "All fields are required.";
+            } else if (!/^\d{10}$/.test(mobile)) {
+                errorMsg = "Mobile number must be exactly 10 digits.";
+            } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+                errorMsg = "Enter a valid email address.";
+            }
+
+            if (errorMsg) {
+                document.getElementById("error-msg").innerText = errorMsg;
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <h1>New User Registration</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <p class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    <form method="POST" class="card" onsubmit="return validateForm();">
+        {% csrf_token %}
+        <p id="error-msg" class="error"></p>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="mobile">Mobile:</label>
+        <input type="text" id="mobile" name="mobile" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="address">Address:</label>
+        <textarea id="address" name="address" required></textarea>
+        <label for="uname">Username:</label>
+        <input type="text" id="uname" name="uname" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

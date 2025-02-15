@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Complaint</title>
+    {% load static %}
+    <script>
+        function validateForm() {
+            let mobile = document.getElementById('mobile').value;
+            let email = document.getElementById('email').value;
+            let name = document.getElementById('name').value;
+            let address = document.getElementById('address').value;
+            let file = document.getElementById('file').value;
+
+            let mobilePattern = /^[0-9]{10}$/;
+            let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if (!name.trim()) {
+                alert("Name is required.");
+                return false;
+            }
+            if (!mobilePattern.test(mobile)) {
+                alert("Mobile number must be exactly 10 digits.");
+                return false;
+            }
+            if (!emailPattern.test(email)) {
+                alert("Enter a valid email address.");
+                return false;
+            }
+            if (!address.trim()) {
+                alert("Address is required.");
+                return false;
+            }
+            if (!file) {
+                alert("Please upload an image file.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/NewComplaint_background.jpeg' %}") no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .card {
+            background-color: rgba(130, 187, 224, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Submit New Complaint</h1>
+    <form method="POST" class="card" enctype="multipart/form-data" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <label for="name">Missing Person's Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="mobile">Missing Person's Mobile:</label>
+        <input type="text" id="mobile" name="mobile" pattern="\d{10}" title="Mobile number must be exactly 10 digits." required>
+
+        <label for="email">Missing Person's Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="address">Last Seen Location:</label>
+        <textarea id="address" name="address" required></textarea>
+
+        <label for="file">Missing Person's Photo:</label>
+        <input type="file" id="file" name="file" accept="image/*" required>
+
+        <div class="button-container">
+            <button type="submit">Submit Complaint</button>
+        </div>
+    </form>
+</body>
+</html>

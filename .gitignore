@@ -1,0 +1,27 @@
+# Python-related ignores
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.swo
+
+# Virtual Environment
+venv/
+env/
+
+# Django-specific ignores
+db.sqlite3
+/media/  # User-uploaded media files
+*.log  # Log files
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment variables and secrets
+.env
+.env.local
+config/settings/local.py  # If using environment-specific settings

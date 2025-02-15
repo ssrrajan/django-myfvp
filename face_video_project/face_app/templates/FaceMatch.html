@@ -1,0 +1,233 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Match</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/facematch_background.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            color:rgb(255, 255, 255);
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: rgba(130, 187, 224, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .card p {
+            color: #101e51;
+            margin: 10px 0;
+        }
+        .card button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .card button:hover {
+            background-color: #0056b3;
+        }
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .home-button:hover {
+            background-color: #0056b3;
+        }
+        .home-button svg {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'home' %}" class="home-button" title="Go to Home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12L12 3l9 9"></path>
+            <path d="M9 21V9h6v12"></path>
+        </svg>
+    </a>
+    <h1>Face Match</h1>
+    <div class="card">
+        <p>Complaint: {{ complaint.complaint_no }}</p>
+        <p>Status: {{ complaint.status }}</p>
+        {% if investigation %}
+            <p>Investigation Date: {{ investigation.created_at }}</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit">Perform Face Match</button>
+                
+            <p></p>
+            <button type="button" onclick="window.location.href='{% url 'complaint_list' %}'" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Cancel</button>
+                {% comment %} <a href="{% url 'complaint_list' %}" class="cancel-button" style="text-align: center; text-decoration: none;">Cancel</a> {% endcomment %}
+            {% comment %}    
+            </form>
+        {% else %}
+            <p>No investigation details available.</p>
+        {% endif %}
+    </div>
+</body>
+</html> {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Match</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/facematch_background.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            color: rgb(255, 255, 255);
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: rgba(130, 187, 224, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .card p {
+            color: #101e51;
+            margin: 10px 0;
+        }
+        .card button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .card button:hover {
+            background-color: #0056b3;
+        }
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .home-button:hover {
+            background-color: #0056b3;
+        }
+        .home-button svg {
+            width: 24px;
+            height: 24px;
+        }
+        .loader {
+            display: none; /* Initially hidden */
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'home' %}" class="home-button" title="Go to Home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12L12 3l9 9"></path>
+            <path d="M9 21V9h6v12"></path>
+        </svg>
+    </a>
+    <h1>Face Match</h1>
+    <div class="card">
+        <p>Complaint: {{ complaint.complaint_no }}</p>
+        <p>Status: {{ complaint.status }}</p>
+        {% if investigation %}
+            <p>Investigation Date: {{ investigation.created_at }}</p>
+            <form method="post" onsubmit="showLoader(event)">
+                {% csrf_token %}
+                <button type="submit" id="matchButton">Perform Face Match</button>
+                
+                <p></p>
+                <button type="button" onclick="window.location.href='{% url 'complaint_list' %}'" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Cancel</button>
+                <div class="loader" id="loader"></div>
+            </form>
+            
+        {% else %}
+            <p>No investigation details available.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function showLoader(event) {
+            event.preventDefault(); // Prevent multiple submissions
+            document.getElementById('matchButton').disabled = true; // Disable button
+            document.getElementById('loader').style.display = 'block'; // Show loader
+            event.target.submit(); // Submit the form
+        }
+    </script>
+</body>
+</html>
